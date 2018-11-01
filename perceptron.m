@@ -7,7 +7,7 @@ close all; clear all; clc;
 %data = data2;
 
 
-data = xlsread('Datos_Proyecto2','datos','b2:k313');
+data = xlsread('Datos_Proyecto2.xls','propuesta1_fs','a2:c313');
 columns = size(data,2);
 G0 = data(data(:,end)==0,1:end-1); %Devuelve los que cumplen que la condición, Grupo 0
 G1 = data(data(:,end)==1,1:end-1); %Devuelve los que cumplen que la condición, Grupo 1
