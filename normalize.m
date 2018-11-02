@@ -6,5 +6,5 @@ function [X] = normalize(data)
 		meanCol = mean(data(:,i));
 		sigma = std(data(:,i));
         X(:,i) = (data(:,i) - meanCol) / sigma;
-	end
+    end
 end
