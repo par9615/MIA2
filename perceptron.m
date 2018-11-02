@@ -7,9 +7,9 @@ close all; clear all; clc;
 %data = data2;
 
 
-data = xlsread('Datos_Proyecto2.xls','datos','A2:J313');
+data = xlsread('Datos_Proyecto2.xls','datos','A2:J317');
 features = logical([1 1 1 1 1 0 0 0 1]); %se seleccionan las variables que se utilizaran
-data = [data(:,features) data(:,end)];
+data = [data(1:end-4,features) data(1:end-4,end)];
 
 columns = size(data,2);
 G0 = data(data(:,end)==0,1:end-1); %Devuelve los que cumplen que la condición, Grupo 0
@@ -23,7 +23,7 @@ G1 = data(data(:,end)==1,1:end-1); %Devuelve los que cumplen que la condición, G
 X = normalize(data(:,1:end-1)); %Variablae independiente
 Y = data(:,end); %Variable dependiente
 m = size(X,1);
-n=4; %grado del polinomio
+n=2; %grado del polinomio
 Js = zeros(1,n); %Lista vacía que se llena con las Jopt 
 %Xa = [ones(m,1) X];
 for i=1:n
@@ -57,3 +57,18 @@ Recall = TP/(TP+FN);
 
 
 
+%Clasificacion de nuevos datos
+newdata = xlsread('Datos_Proyecto2.xls','datos','A2:I317');
+newdata = newdata(:,features);
+newdata = normalize(newdata); %se normalizan los datos de entrenamiento junto con los de test
+X = newdata(end-3:end,:); %Variablae independiente
+
+m = size(X,1);
+grado = 2;
+
+Xa = func_polinomio(X,grado);%Para un modelo de grado 
+
+V = Xa*Wopt; %Regresión Logística
+Yg = 1./(1+exp(-V));
+
+Yg = round(Yg);
