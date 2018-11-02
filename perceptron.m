@@ -7,12 +7,17 @@ close all; clear all; clc;
 %data = data2;
 
 
-data = xlsread('Datos_Proyecto2.xls','propuesta1_fs','a2:c313');
+data = xlsread('Datos_Proyecto2.xls','datos','A2:J313');
+features = logical([1 1 1 1 1 0 0 0 1]); %se seleccionan las variables que se utilizaran
+data = [data(:,features) data(:,end)];
+
 columns = size(data,2);
 G0 = data(data(:,end)==0,1:end-1); %Devuelve los que cumplen que la condición, Grupo 0
 G1 = data(data(:,end)==1,1:end-1); %Devuelve los que cumplen que la condición, Grupo 1
 
 %plot(G0(:,1),G0(:,2),'bo', G1(:,1),G1(:,2), 'rx')
+
+
 
 %Regresión Logística
 X = normalize(data(:,1:end-1)); %Variablae independiente
@@ -32,7 +37,7 @@ for i=1:n
     [Wopt, Jopt] = fminunc(@(W)fun_costo(W,Xa,Y),W,options);
     Js(1,i)=Jopt;
 %Simulación del modelo
-    V = Xa*Wopt; %Regreción Logística
+    V = Xa*Wopt; %Regresión Logística
     Yg = 1./(1+exp(-V));
 
     Yg = round(Yg);
@@ -45,10 +50,10 @@ FP = sum(Y==0&Yg==1);
 FN = sum(Y==1&Yg==0);
 
 Accuracy = (TP+TN)/(TP+TN+FP+FN);
-Precition = (TP)/(TP+FP);
+Precision = (TP)/(TP+FP);
 Recall = TP/(TP+FN);
 
-[Accuracy Precition Recall]
+[Accuracy Precision Recall]
 
 
 
